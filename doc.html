@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <title>Mapa – Roteiro Copenhague</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #map { width: 100%; height: 100%; }
+
+    .marker-number {
+      background-color: white;
+      border-radius: 50%;
+      border: 2px solid #333;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .day1 { border-color: #e74c3c; color: #e74c3c; }
+    .day2 { border-color: #2980b9; color: #2980b9; }
+
+    .popup-section { margin-top: 4px; font-size: 13px; }
+    .popup-section span { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+    function createNumberIcon(number, day) {
+      const div = document.createElement("div");
+      div.className = "marker-number " + (day === 1 ? "day1" : "day2");
+      div.innerHTML = number;
+      return L.divIcon({
+        html: div,
+        className: "",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      });
+    }
+
+    const map = L.map("map").setView([55.678, 12.58], 13);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19
+    }).addTo(map);
+
+    const day1Layer = L.layerGroup().addTo(map);
+    const day2Layer = L.layerGroup().addTo(map);
+
+    const day1 = [
+      {
+        n: 1,
+        emoji: "🎒",
+        name: "Hostel – Vandkunsten 5",
+        coords: [55.6774, 12.5735],
+        endereco: "Vandkunsten 5, 1467 København.",
+        descricao: "Chegada e pit stop para deixar as malas no luggage storage.",
+        horario: "Sugestão de horário — 09h30 a 10h15",
+        preco: "Gratuito para guardar malas antes do check-in.",
+        site: ""
+      },
+      {
+        n: 2,
+        emoji: "🏰",
+        name: "Palácio de Christiansborg",
+        coords: [55.6761, 12.5803],
+        endereco: "Prins Jørgens Gård 1, 1218 København.",
+        descricao: "Sede do parlamento e antigos aposentos reais. Destaque para os Royal Reception Rooms e a Tapeçaria da Rainha.",
+        horario: "Sugestão de horário — 10h15 a 12h30",
+        preco: "Ingresso: 215 DKK (Aprox. €29) para o bilhete combinado. Torre gratuita.",
+        site: "Site oficial: kongeligeslotte.dk"
+      },
+      {
+        n: 3,
+        emoji: "🚶‍♀️",
+        name: "Strøget – Almoço na rua de pedestres",
+        coords: [55.6785, 12.5730],
+        endereco: "Strøget, 1160 København.",
+        descricao: "Rua de pedestres famosa. Ótimo lugar para comer um Smørrebrød em cafés charmosos.",
+        horario: "Sugestão de horário — 12h30 a 14h00",
+        preco: "Custo conforme o que você consumir.",
+        site: ""
+      },
+      {
+        n: 4,
+        emoji: "🏰",
+        name: "Castelo de Rosenborg e Jardins do Rei",
+        coords: [55.6854, 12.5776],
+        endereco: "Øster Voldgade 4A, 1350 København.",
+        descricao: "Castelo renascentista onde ficam as Joias da Coroa, rodeado por um parque magnífico.",
+        horario: "Sugestão de horário — 14h15 a 15h30",
+        preco: "Ingresso: 140 DKK (Aprox. €19). Recomenda-se comprar online.",
+        site: "Site oficial: kongernessamling.dk/rosenborg/"
+      },
+      {
+        n: 5,
+        emoji: "🛶",
+        name: "Canal de Nyhavn e Passeio de Barco",
+        coords: [55.6794, 12.5900],
+        endereco: "Nyhavn, 1051 København.",
+        descricao: "Cartão-postal das casinhas coloridas. Tour de barco clássico de 1 hora pelos canais.",
+        horario: "Sugestão de horário — 15h45 a 17h00",
+        preco: "Ingresso: 100–140 DKK (€13–€19), dependendo da empresa.",
+        site: "Site oficial: stromma.com"
+      },
+      {
+        n: 6,
+        emoji: "⛪",
+        name: "Igreja de Mármore (Frederiks Kirke)",
+        coords: [55.6845, 12.5910],
+        endereco: "Frederiksgade 4, 1265 København.",
+        descricao: "Cúpula imponente atrás da praça real. Vale a visita pela arquitetura externa.",
+        horario: "Sugestão de horário — 17h15 a 17h45",
+        preco: "Ingresso: Gratuito para o plano principal da igreja.",
+        site: "Site oficial: frederikskirken.dk"
+      },
+      {
+        n: 7,
+        emoji: "🏰",
+        name: "Palácio de Amalienborg",
+        coords: [55.6848, 12.5930],
+        endereco: "Amalienborg Slotsplads, 1257 København.",
+        descricao: "Residência oficial da família real dinamarquesa. Praça octogonal com guardas reais.",
+        horario: "Sugestão de horário — 17h45 a 18h30",
+        preco: "Ingresso: Gratuito na área externa.",
+        site: ""
+      },
+      {
+        n: 8,
+        emoji: "🗿",
+        name: "A Pequena Sereia",
+        coords: [55.6929, 12.5993],
+        endereco: "Langelinie, 2100 København.",
+        descricao: "Estátua mais famosa da Escandinávia, inspirada no conto de Hans Christian Andersen.",
+        horario: "Sugestão de horário — 18h45 a 19h30",
+        preco: "Ingresso: Gratuito.",
+        site: ""
+      },
+      {
+        n: 9,
+        emoji: "🌉",
+        name: "Dronning Louises Bro – Jantar e Pôr do Sol",
+        coords: [55.6867, 12.5576],
+        endereco: "Dronning Louises Bro, 2200 København.",
+        descricao: "Ponte onde os locais se reúnem para ver o pôr do sol sobre os lagos.",
+        horario: "Sugestão de horário — 20h00 em diante",
+        preco: "Custo conforme o que você comprar para comer/beber.",
+        site: ""
+      }
+    ];
+
+    const day2 = [
+      {
+        n: 1,
+        emoji: "⛪",
+        name: "Igreja de Nosso Salvador (Vor Frelsers Kirke)",
+        coords: [55.6726, 12.5930],
+        endereco: "Skt. Annæ Gade 9, 1416 København.",
+        descricao: "Torre preta e dourada com escadaria externa em espiral. Vista incrível ao começar o dia.",
+        horario: "Sugestão de horário — 08h30 a 09h30",
+        preco: "Ingresso para a torre: cerca de 69 DKK (Aprox. €9). Agendamento online recomendado.",
+        site: "Site oficial: vorfrelserskirke.dk"
+      },
+      {
+        n: 2,
+        emoji: "🏙️",
+        name: "Christianshavn",
+        coords: [55.6738, 12.5935],
+        endereco: "Christianshavn, 1400 København.",
+        descricao: "Bairro charmoso apelidado de 'Veneza de Copenhague', com canais calmos.",
+        horario: "Sugestão de horário — 09h30 a 10h15",
+        preco: "Ingresso: Gratuito.",
+        site: ""
+      },
+      {
+        n: 3,
+        emoji: "🏙️",
+        name: "Freetown Christiania",
+        coords: [55.6730, 12.5990],
+        endereco: "Prinsessegade, 1422 København.",
+        descricao: "Comunidade hippie autogovernada. Respeite as regras locais e evite fotografar na Green Light District.",
+        horario: "Sugestão de horário — 10h15 a 11h00",
+        preco: "Ingresso: Gratuito.",
+        site: ""
+      },
+      {
+        n: 4,
+        emoji: "🔭",
+        name: "A Torre Redonda (Rundetårn)",
+        coords: [55.6815, 12.5733],
+        endereco: "Købmagergade 52A, 1150 København.",
+        descricao: "Observatório do século XVII com rampa em espiral e vista 360° do centro histórico.",
+        horario: "Sugestão de horário — 11h30 a 12h30",
+        preco: "Ingresso: 40 DKK (Aprox. €5,50), pago na bilheteria.",
+        site: "Site oficial: rundetaarn.dk"
+      },
+      {
+        n: 5,
+        emoji: "🍽️",
+        name: "Mercado Torvehallerne – Almoço e Check-out",
+        coords: [55.6835, 12.5719],
+        endereco: "Frederiksborggade 21, 1362 København.",
+        descricao: "Mercado gastronômico coberto com opções de Smørrebrød gourmet, peixes frescos e doces artesanais.",
+        horario: "Sugestão de horário — 12h30 a 13h45",
+        preco: "Custo conforme o que você consumir.",
+        site: ""
+      },
+      {
+        n: 6,
+        emoji: "🚉",
+        name: "Copenhagen Central Station – Retorno",
+        coords: [55.6726, 12.5649],
+        endereco: "Bernstorffsgade, 1577 København.",
+        descricao: "Estação central para o embarque das 14h30.",
+        horario: "Sugestão de horário — 14h00 a 14h30",
+        preco: "Custo conforme o bilhete de transporte.",
+        site: ""
+      }
+    ];
+
+    const d1coords = [];
+    const d2coords = [];
+
+    function buildPopup(p, day) {
+      let html = `<b>${p.emoji} ${p.name}</b>`;
+      html += `<div class="popup-section"><span>Endereço:</span> ${p.endereco}</div>`;
+      html += `<div class="popup-section"><span>Descrição:</span> ${p.descricao}</div>`;
+      if (p.horario) {
+        html += `<div class="popup-section"><span>${p.horario}</span></div>`;
+      }
+      if (p.preco) {
+        html += `<div class="popup-section"><span>Preço:</span> ${p.preco}</div>`;
+      }
+      if (p.site) {
+        html += `<div class="popup-section"><span>Site:</span> ${p.site}</div>`;
+      }
+      return html;
+    }
+
+    day1.forEach(p => {
+      L.marker(p.coords, { icon: createNumberIcon(p.n, 1) })
+        .bindPopup(buildPopup(p, 1))
+        .addTo(day1Layer);
+      d1coords.push(p.coords);
+    });
+
+    day2.forEach(p => {
+      L.marker(p.coords, { icon: createNumberIcon(p.n, 2) })
+        .bindPopup(buildPopup(p, 2))
+        .addTo(day2Layer);
+      d2coords.push(p.coords);
+    });
+
+    L.polyline(d1coords, { color: "#e74c3c", weight: 3 }).addTo(day1Layer);
+    L.polyline(d2coords, { color: "#2980b9", weight: 3 }).addTo(day2Layer);
+
+    L.control.layers(null, {
+      "Dia 1 – Palácios, Canais e Cúpula de Mármore": day1Layer,
+      "Dia 2 – Canais, Cultura Alternativa e Torre Astronômica": day2Layer
+    }).addTo(map);
+
+    map.fitBounds(L.latLngBounds(d1coords.concat(d2coords)), { padding: [30, 30] });
+  </script>
+</body>
+</html>
